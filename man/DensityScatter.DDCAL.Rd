@@ -2,17 +2,18 @@
 \alias{DensityScatter.DDCAL}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Scatter density plot using DDCAL
+Scatter density plot [Brinkmann et al., 2023]
 }
 \description{
-Density estimation (PDE) [Ultsch, 2005] or "SDH" [Eilers/Goeman, 2004] used for a scatter density plot, with clustering of densities with DDCAL [Lux/Rinderle-Ma, 2023]
+Density estimation (PDE) [Ultsch, 2005] or "SDH" [Eilers/Goeman, 2004] used for a scatter density plot, with clustering of densities with DDCAL [Lux/Rinderle-Ma, 2023] proposed by [Brinkmann et al., 2023].
 }
 \usage{
-DensityScatter.DDCAL(X, Y, xlab, ylab, SDHorPDE = TRUE, Plotter = "native",
-
-Silent = FALSE, Marginals = FALSE, pch = 10, Size = 1, BW = TRUE,
-
-PDEsample = 5000, lwd = 2, na.rm=TRUE,Polygon, ...)
+DensityScatter.DDCAL(X, Y, nClusters = 12, Plotter = "native", 
+SDHorPDE = TRUE, PDEsample = 5000,
+Marginals = FALSE, na.rm=TRUE,
+pch = 10, Size = 1, 
+xlab="x", ylab="y", main = "",lwd = 2,
+xlim=NULL,ylim=NULL,Polygon,BW = TRUE,Silent = FALSE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -22,23 +23,25 @@ Numeric vector [1:n], first feature (for x axis values)
   \item{Y}{
 Numeric vector [1:n], second feature (for y axis values)
 }
-  \item{xlab}{
-String, title of the x axis. Default: "X",   see \code{plot()} function
-}
-  \item{ylab}{
-String, title of the y axis. Default: "Y",   see \code{plot()} function
-}
-  \item{SDHorPDE}{
-(Optional) Boolean, if TRUE SDH is used to calculate density, if FALSE PDE is used
+  \item{nClusters}{
+Integer defining the number of clusters (colors) used for finding a hard color
+transition.
 }
   \item{Plotter}{
 (Optional) String, name of the plotting backend to use. Possible values are: "\code{native}" or "\code{ggplot2}"
 }
-  \item{Silent}{
-(Optional) Boolean, if TRUE no messages will be printed, default is FALSE
+
+  \item{SDHorPDE}{
+(Optional) Boolean, if TRUE SDH is used to calculate density, if FALSE PDE is used
+}
+  \item{PDEsample}{
+(Optional) Scalar, Sample size for PDE and/or for ggplot2 plotting. Default is 5000
 }
   \item{Marginals}{
 (Optional) Boolean, if TRUE the marginal distributions of X and Y will be plotted together with the 2D density of X and Y. Default is FALSE
+}
+  \item{na.rm}{
+(Optional) Boolean, if TRUE non finite values will be removed
 }
   \item{pch}{
 (Optional) Scalar or character. Indicates the shape of data points, see \code{plot()} function or the \code{shape} argument in ggplot2. Default is 10
@@ -46,20 +49,35 @@ String, title of the y axis. Default: "Y",   see \code{plot()} function
   \item{Size}{
 (Optional) Scalar, size of data points in plot, default is 1
 }
-  \item{BW}{
-(Optional) Boolean, if TRUE ggplot2 will use a white background, if FALSE the typical ggplot2 backgournd is used. Not needed if "\code{native}" as Plotter is used. Default is TRUE
+
+  \item{xlab}{
+String, title of the x axis. Default: "X",   see \code{plot()} function
 }
-  \item{PDEsample}{
-(Optional) Scalar, Sample size for PDE and/or for ggplot2 plotting. Default is 5000
+  \item{ylab}{
+String, title of the y axis. Default: "Y",   see \code{plot()} function
+}
+  \item{main}{
+(Optional)  Character, title of the plot. [1:2] 
 }
   \item{lwd}{
 (Optional) Scalar, thickness of the lines used for the marginal distributions (only needed if \code{Marginals=TRUE}), see \code{plot()}. Default = 2
 }
-  \item{na.rm}{
-(Optional) Boolean, if TRUE non finite values will be removed
+
+  \item{xlim}{
+(Optional) numerical vector, min and max of x values to be plottet
 }
+  \item{ylim}{
+(Optional) numerical vector, min and max of y values to be plottet
+}
+
   \item{Polygon}{
-(Optional) [1:p,1:2] numeric matrix that defines for x and y coordinates a polygon in magenta, works only for native method
+(Optional) [1:p,1:2] numeric matrix that defines for x and y coordinates a polygon in magenta
+}
+  \item{BW}{
+(Optional) Boolean, if TRUE ggplot2 will use a white background, if FALSE the typical ggplot2 backgournd is used. Not needed if "\code{native}" as Plotter is used. Default is TRUE
+}
+  \item{Silent}{
+(Optional) Boolean, if TRUE no messages will be printed, default is FALSE
 }
   \item{\dots}{
 Further plot arguments
@@ -81,6 +99,8 @@ If "\code{ggplot2}" as Plotter is used, the ggobj is returned
 [Eilers/Goeman, 2004]  Eilers, P. H., & Goeman, J. J.: Enhancing scatterplots with smoothed densities, Bioinformatics, Vol. 20(5), pp. 623-628. 2004.
 
 [Lux/Rinderle-Ma, 2023]  Lux, M. & Rinderle-Ma, S.: DDCAL: Evenly Distributing Data into Low Variance Clusters Based on Iterative Feature Scaling, Journal of Classification vol. 40, pp. 106-144, 2023.
+
+[Brinkmann et al., 2023]  Brinkmann, L., Stier, Q., & Thrun, M. C.: Computing Sensitive Color Transitions for the Identification of Two-Dimensional Structures, Proc. Data Science, Statistics & Visualisation (DSSV) and the European Conference on Data Analysis (ECDA), p.109, Antwerp, Belgium, July 5-7, 2023. 
 
 }
 \author{
