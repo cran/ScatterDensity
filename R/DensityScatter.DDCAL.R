@@ -52,6 +52,7 @@ DensityScatter.DDCAL = function (X,
   if(isFALSE(Silent)){
     message("DensityScatter.DDCAL: Estimating colors...")
   }
+  
   cls = DDCAL(Dens, nClusters = nClusters, minBoundary = 0.2, 
               maxBoundary = 0.6, numSimulations = 20, 
               csTolerance = 0.45, csToleranceIncrease = 0.5)
