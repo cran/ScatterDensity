@@ -1,14 +1,14 @@
-SmoothedDensitiesXY = function (X, Y, nbins, lambda, Xkernels, Ykernels, PlotIt = FALSE) 
+SmoothedDensitiesXY = function (X, Y, nbins, lambda, Xkernels, Ykernels,Compute="Cpp", PlotIt = FALSE) 
 {
     if (!requireNamespace("pracma")) 
         stop("pracma package is missing")
     if (missing(nbins)) {
-        nbins = c(min(length(unique(X)), 2000), min(length(unique(Y)), 
-            2000))
+        nbins = c(min(length(unique(X)), 250), min(length(unique(Y)), 
+                 250))
     }
     else if (is.null(nbins)) {
-        nbins = c(min(length(unique(X)), 2000), min(length(unique(Y)), 
-            2000))
+        nbins = c(min(length(unique(X)), 250), min(length(unique(Y)), 
+                  250))
     }
     else if (length(nbins) == 1) {
         nbins = c(nbins, nbins)
@@ -23,6 +23,10 @@ SmoothedDensitiesXY = function (X, Y, nbins, lambda, Xkernels, Ykernels, PlotIt 
     }
     else {
     }
+  
+  Compute=tolower(Compute)
+  Compute=gsub("\\+","p",Compute)
+  
     X = as.vector(X)
     Y = as.vector(Y)
     OrigN = length(X)
@@ -68,10 +72,32 @@ SmoothedDensitiesXY = function (X, Y, nbins, lambda, Xkernels, Ykernels, PlotIt 
     bin = matrix(0, n, 2)
     bin[, 2] = pracma::histc(X, edges1)$bin
     bin[, 1] = pracma::histc(Y, edges2)$bin
-    H = pracma::accumarray(bin, rep(1, nrow(bin)), nbins[c(2, 
-        1)])/n
-    G = smooth1D(H, nbins[2]/lambda)
-    hist_F_2D = t(smooth1D(t(G), nbins[1]/lambda))
+    
+    switch (Compute,
+      cpp = {
+        H=accumarray_rcpp(bin, rep(1, nrow(bin)), nbins[c(2, 
+                                                          1)])/n
+        G = smooth1D_C(H, nbins[2]/lambda)
+        hist_F_2D = t(smooth1D_C(t(G), nbins[1]/lambda))
+      },
+      r = {
+        H = pracma::accumarray(bin, rep(1, nrow(bin)), nbins[c(2, 
+                                                               1)])/n
+        G = smooth1D(H, nbins[2]/lambda)
+        hist_F_2D = t(smooth1D(t(G), nbins[1]/lambda))
+      },
+      parallel = {
+        H=accumarray_rcpp(bin, rep(1, nrow(bin)), nbins[c(2, 
+                                                          1)])/n
+        G = smooth1D_parallel(H, nbins[2]/lambda, nbins[2],smooth_rows=TRUE)
+        hist_F_2D = smooth1D_parallel(G,nbins[1]/lambda, nbins[1],smooth_rows=FALSE)
+        #hist_F_2D = t(smooth1D_parallel(t(G), nbins[1]/lambda))
+      },
+      {
+        stop("SmoothedDensitiesXY:Incorrect Compute parameter selected. Options are 'R','Cpp,'Parallel'")
+      }
+    )
+
     MaxF = max(as.vector(hist_F_2D))
     hist_F_2D = hist_F_2D/MaxF
     m = dim(hist_F_2D)[1]
@@ -84,5 +110,5 @@ SmoothedDensitiesXY = function (X, Y, nbins, lambda, Xkernels, Ykernels, PlotIt 
         DataVisualizations::zplot(X, Y, Density)
     }
     return(list(Densities = as.vector(Density), Xkernels = Xkernels, 
-        Ykernels = Ykernels, hist_F_2D = hist_F_2D, ind = ind))
+        Ykernels = Ykernels, GridDensity = hist_F_2D, Points2GridInd = ind))
 }

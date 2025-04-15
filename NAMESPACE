@@ -1,11 +1,12 @@
 useDynLib(ScatterDensity, .registration = TRUE)
 export("DensityScatter.DDCAL","SmoothedDensitiesXY", 
-       "PDEscatter","DDCAL","PointsInPolygon","PolygonGate")
+       "PDEscatter","DDCAL","PointsInPolygon","PolygonGate","SampleScatter")
 
 import(Rcpp)
+importFrom(RcppParallel,RcppParallelLibs,defaultNumThreads,setThreadOptions)
 importFrom("grDevices", "colorRampPalette")
 importFrom("graphics", "axis", "hist", "lines", "par", "points", "title")
 importFrom("methods", "as")
 importFrom("stats", "dist", "quantile", "sd")
 importFrom("utils", "head", "tail")
-
+importFrom("stats", "median")

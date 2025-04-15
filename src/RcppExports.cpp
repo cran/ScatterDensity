@@ -11,6 +11,20 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// accumarray_rcpp
+SEXP accumarray_rcpp(SEXP subs, NumericVector val, Nullable<NumericVector> sz, double fillval);
+RcppExport SEXP _ScatterDensity_accumarray_rcpp(SEXP subsSEXP, SEXP valSEXP, SEXP szSEXP, SEXP fillvalSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type subs(subsSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type val(valSEXP);
+    Rcpp::traits::input_parameter< Nullable<NumericVector> >::type sz(szSEXP);
+    Rcpp::traits::input_parameter< double >::type fillval(fillvalSEXP);
+    rcpp_result_gen = Rcpp::wrap(accumarray_rcpp(subs, val, sz, fillval));
+    return rcpp_result_gen;
+END_RCPP
+}
 // c_inPSphere2D
 IntegerVector c_inPSphere2D(NumericMatrix data, IntegerVector xBinNr, IntegerVector yBinNr, unsigned int nrXBins, unsigned int nrYBins, unsigned int nrData, double paretoRadius);
 RcppExport SEXP _ScatterDensity_c_inPSphere2D(SEXP dataSEXP, SEXP xBinNrSEXP, SEXP yBinNrSEXP, SEXP nrXBinsSEXP, SEXP nrYBinsSEXP, SEXP nrDataSEXP, SEXP paretoRadiusSEXP) {
@@ -28,22 +42,73 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// c_inPSphere2D_parallel
+IntegerVector c_inPSphere2D_parallel(NumericMatrix data, IntegerVector xBinNr, IntegerVector yBinNr, unsigned int nrXBins, unsigned int nrYBins, unsigned int nrData, double paretoRadius);
+RcppExport SEXP _ScatterDensity_c_inPSphere2D_parallel(SEXP dataSEXP, SEXP xBinNrSEXP, SEXP yBinNrSEXP, SEXP nrXBinsSEXP, SEXP nrYBinsSEXP, SEXP nrDataSEXP, SEXP paretoRadiusSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type xBinNr(xBinNrSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type yBinNr(yBinNrSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type nrXBins(nrXBinsSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type nrYBins(nrYBinsSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type nrData(nrDataSEXP);
+    Rcpp::traits::input_parameter< double >::type paretoRadius(paretoRadiusSEXP);
+    rcpp_result_gen = Rcpp::wrap(c_inPSphere2D_parallel(data, xBinNr, yBinNr, nrXBins, nrYBins, nrData, paretoRadius));
+    return rcpp_result_gen;
+END_RCPP
+}
 // quantile4LargeVectors
-Rcpp::NumericVector quantile4LargeVectors(Rcpp::NumericVector x, Rcpp::NumericVector probs);
+NumericVector quantile4LargeVectors(NumericVector x, NumericVector probs);
 RcppExport SEXP _ScatterDensity_quantile4LargeVectors(SEXP xSEXP, SEXP probsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type probs(probsSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type probs(probsSEXP);
     rcpp_result_gen = Rcpp::wrap(quantile4LargeVectors(x, probs));
+    return rcpp_result_gen;
+END_RCPP
+}
+// smooth1D_C
+arma::mat smooth1D_C(arma::mat Y, double lambda, bool na_rm, bool Silent);
+RcppExport SEXP _ScatterDensity_smooth1D_C(SEXP YSEXP, SEXP lambdaSEXP, SEXP na_rmSEXP, SEXP SilentSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< bool >::type na_rm(na_rmSEXP);
+    Rcpp::traits::input_parameter< bool >::type Silent(SilentSEXP);
+    rcpp_result_gen = Rcpp::wrap(smooth1D_C(Y, lambda, na_rm, Silent));
+    return rcpp_result_gen;
+END_RCPP
+}
+// smooth1D_parallel
+arma::mat smooth1D_parallel(arma::mat G, double lambda, int nbins, bool smooth_rows, bool na_rm, bool Silent);
+RcppExport SEXP _ScatterDensity_smooth1D_parallel(SEXP GSEXP, SEXP lambdaSEXP, SEXP nbinsSEXP, SEXP smooth_rowsSEXP, SEXP na_rmSEXP, SEXP SilentSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type G(GSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< int >::type nbins(nbinsSEXP);
+    Rcpp::traits::input_parameter< bool >::type smooth_rows(smooth_rowsSEXP);
+    Rcpp::traits::input_parameter< bool >::type na_rm(na_rmSEXP);
+    Rcpp::traits::input_parameter< bool >::type Silent(SilentSEXP);
+    rcpp_result_gen = Rcpp::wrap(smooth1D_parallel(G, lambda, nbins, smooth_rows, na_rm, Silent));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_ScatterDensity_accumarray_rcpp", (DL_FUNC) &_ScatterDensity_accumarray_rcpp, 4},
     {"_ScatterDensity_c_inPSphere2D", (DL_FUNC) &_ScatterDensity_c_inPSphere2D, 7},
+    {"_ScatterDensity_c_inPSphere2D_parallel", (DL_FUNC) &_ScatterDensity_c_inPSphere2D_parallel, 7},
     {"_ScatterDensity_quantile4LargeVectors", (DL_FUNC) &_ScatterDensity_quantile4LargeVectors, 2},
+    {"_ScatterDensity_smooth1D_C", (DL_FUNC) &_ScatterDensity_smooth1D_C, 4},
+    {"_ScatterDensity_smooth1D_parallel", (DL_FUNC) &_ScatterDensity_smooth1D_parallel, 6},
     {NULL, NULL, 0}
 };
 
